@@ -20,6 +20,7 @@ import rs.fon.inteligentni.rest.exception.SpotifyProxyRuntimeException;
 
 import com.wrapper.spotify.Api;
 import com.wrapper.spotify.exceptions.WebApiException;
+import com.wrapper.spotify.methods.TrackRequest;
 import com.wrapper.spotify.methods.TrackSearchRequest;
 import com.wrapper.spotify.methods.authentication.ClientCredentialsGrantRequest;
 import com.wrapper.spotify.models.ClientCredentials;
@@ -162,5 +163,35 @@ public class SpotifyApiManagerImpl implements SpotifyApiManager {
 			}
 		}
 		return fullTracks;
+	}
+
+	@Override
+	public FullTrack getTrackById(String id) {
+		if (api == null) {
+			authorize();
+		}	
+
+		TrackRequest request = api.getTrack(id).build();
+		int tryCount = 2;
+		RuntimeException exception = null;
+		do {
+			try {
+				Track trackResult = request.get();				
+				if (trackResult==null) {
+					logger.debug("Couldn't find track with id " + id);
+					return null;
+				}
+				return convertToFullTrack(trackResult);
+			} catch (IOException | WebApiException e) {
+				tryCount--;
+				if(tryCount==0){
+					exception = new SpotifyProxyRuntimeException(e.getMessage());
+				}else{
+					authorize();
+				}
+			}
+		} while (tryCount > 0);
+		
+		throw exception;	
 	}
 }
