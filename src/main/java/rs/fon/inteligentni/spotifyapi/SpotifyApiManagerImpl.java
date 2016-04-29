@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import rs.fon.inteligentni.model.FullArtists;
-import rs.fon.inteligentni.model.FullArtist;
 import rs.fon.inteligentni.model.FullTrack;
 import rs.fon.inteligentni.rest.exception.SpotifyProxyRuntimeException;
 
@@ -42,6 +41,7 @@ public class SpotifyApiManagerImpl implements SpotifyApiManager {
 			.getLogger(SpotifyApiManagerImpl.class);
 
 	private void authorize() {
+		logger.info("Going to Authorize on Spotify.");
 		api = Api.builder().clientId(clientId).clientSecret(clientSecret)
 				.build();
 
@@ -70,6 +70,7 @@ public class SpotifyApiManagerImpl implements SpotifyApiManager {
 		String accessToken = clientCredentials.getAccessToken();
 		logger.debug("Access token: " + accessToken);
 		api.setAccessToken(accessToken);
+		logger.info("Spotify authorization successful");
 
 	}
 
@@ -123,13 +124,12 @@ public class SpotifyApiManagerImpl implements SpotifyApiManager {
 	public FullTrack getTrackByName(String name) {
 		if (api == null) {
 			authorize();
-		}	
-
-		TrackSearchRequest request = api.searchTracks(name).build();
-		int tryCount = 2;
+		}
+		int tryCount = 3;
 		RuntimeException exception = null;
 		do {
 			try {
+				TrackSearchRequest request = api.searchTracks(name).build();
 				Page<Track> trackSearchResult = request.get();
 				logger.debug("I got " + trackSearchResult.getTotal()
 						+ " results!");
@@ -141,15 +141,18 @@ public class SpotifyApiManagerImpl implements SpotifyApiManager {
 				return convertToFullTrack(trackList.get(0));
 			} catch (IOException | WebApiException e) {
 				tryCount--;
-				if(tryCount==0){
+				logger.error(
+						"Error retreiving song from Spotify. Going to try "
+								+ tryCount + " more time:", e);
+				if (tryCount == 0) {
 					exception = new SpotifyProxyRuntimeException(e.getMessage());
-				}else{
+				} else {
 					authorize();
 				}
 			}
 		} while (tryCount > 0);
-		
-		throw exception;	
+
+		throw exception;
 
 	}
 
@@ -169,29 +172,29 @@ public class SpotifyApiManagerImpl implements SpotifyApiManager {
 	public FullTrack getTrackById(String id) {
 		if (api == null) {
 			authorize();
-		}	
+		}
 
 		TrackRequest request = api.getTrack(id).build();
 		int tryCount = 2;
 		RuntimeException exception = null;
 		do {
 			try {
-				Track trackResult = request.get();				
-				if (trackResult==null) {
+				Track trackResult = request.get();
+				if (trackResult == null) {
 					logger.debug("Couldn't find track with id " + id);
 					return null;
 				}
 				return convertToFullTrack(trackResult);
 			} catch (IOException | WebApiException e) {
 				tryCount--;
-				if(tryCount==0){
+				if (tryCount == 0) {
 					exception = new SpotifyProxyRuntimeException(e.getMessage());
-				}else{
+				} else {
 					authorize();
 				}
 			}
 		} while (tryCount > 0);
-		
-		throw exception;	
+
+		throw exception;
 	}
 }

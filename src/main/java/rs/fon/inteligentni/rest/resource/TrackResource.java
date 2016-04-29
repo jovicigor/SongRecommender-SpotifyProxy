@@ -17,7 +17,7 @@ import rs.fon.inteligentni.spotifyapi.SpotifyApiManager;
 public class TrackResource {
 
 	@Autowired
-	SpotifyApiManager spotifyApiManager;
+	private SpotifyApiManager spotifyApiManager;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public List<FullTrack> getTracksByNames(
