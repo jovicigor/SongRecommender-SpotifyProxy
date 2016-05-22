@@ -124,8 +124,13 @@ public class SpotifyApiManagerImpl implements SpotifyApiManager {
 			ReleaseDate releaseDateObj = resultReleaseDate.getBody();
 			if(releaseDateObj!=null){
 				logger.debug("Received release date: "+releaseDateObj);
-				fullTrack.setReleaseDate(releaseDateObj.getRelease_date());
-				fullTrack.setReleaseDatePrecision(releaseDateObj.getRelease_date_precision());
+				try {
+					Integer year = Integer.parseInt(releaseDateObj.getRelease_date().substring(0,4));
+					fullTrack.setAlbumYear(year);
+				} catch (Exception e) {
+					logger.error("Failed to parse year from release date",e);
+				}
+				
 			}
 		}
 		

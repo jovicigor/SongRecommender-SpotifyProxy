@@ -12,8 +12,7 @@ public class FullTrack {
 	// TRACK-INFO
 	private String id;
 	private String album;
-	private String releaseDate;
-	private String releaseDatePrecision;
+	private Integer albumYear;
 	private Integer duration;
 	private String name;
 	private Integer popularity;
@@ -50,22 +49,14 @@ public class FullTrack {
 
 	public void setAlbum(String album) {
 		this.album = album;
-	}	
+	}		
 
-	public String getReleaseDate() {
-		return releaseDate;
+	public Integer getAlbumYear() {
+		return albumYear;
 	}
 
-	public void setReleaseDate(String releaseDate) {
-		this.releaseDate = releaseDate;
-	}	
-
-	public String getReleaseDatePrecision() {
-		return releaseDatePrecision;
-	}
-
-	public void setReleaseDatePrecision(String releaseDatePrecision) {
-		this.releaseDatePrecision = releaseDatePrecision;
+	public void setAlbumYear(Integer albumYear) {
+		this.albumYear = albumYear;
 	}
 
 	public Integer getDuration() {
