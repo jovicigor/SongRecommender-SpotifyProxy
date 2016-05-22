@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import rs.fon.inteligentni.model.FullArtists;
 import rs.fon.inteligentni.model.FullTrack;
+import rs.fon.inteligentni.model.ReleaseDate;
 import rs.fon.inteligentni.rest.exception.SpotifyProxyRuntimeException;
 
 import com.wrapper.spotify.Api;
@@ -116,6 +117,18 @@ public class SpotifyApiManagerImpl implements SpotifyApiManager {
 			fullTrack.setArtists(fullArtists.getArtists());
 
 		}
+		
+		if(track.getAlbum()!=null && track.getAlbum().getHref()!=null){
+		logger.debug("Album is not null, href is not null: "+track.getAlbum().getName()+", href: "+track.getAlbum().getHref());
+		ResponseEntity<ReleaseDate> resultReleaseDate = restTemplate.exchange(track.getAlbum().getHref(), HttpMethod.GET,entity,ReleaseDate.class);
+			ReleaseDate releaseDateObj = resultReleaseDate.getBody();
+			if(releaseDateObj!=null){
+				logger.debug("Received release date: "+releaseDateObj);
+				fullTrack.setReleaseDate(releaseDateObj.getRelease_date());
+				fullTrack.setReleaseDatePrecision(releaseDateObj.getRelease_date_precision());
+			}
+		}
+		
 		return fullTrack;
 
 	}
