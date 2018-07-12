@@ -11,11 +11,6 @@ public class SpotifyProxyApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpotifyProxyApplication.class, args);
     }
-
-    @Bean
-    public SpotifyApiManager spotifyApiManager() {
-        return new SpotifyApiManager();
-    }
 }
 
 	

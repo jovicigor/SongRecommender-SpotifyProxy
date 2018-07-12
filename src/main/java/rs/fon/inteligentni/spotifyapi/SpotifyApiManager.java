@@ -16,6 +16,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import rs.fon.inteligentni.model.FullArtists;
 import rs.fon.inteligentni.model.FullTrack;
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class SpotifyApiManager {
 
     @Value("${spotify.api.clientId}")
