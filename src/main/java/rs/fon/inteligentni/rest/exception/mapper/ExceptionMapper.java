@@ -15,7 +15,7 @@ import rs.fon.inteligentni.rest.exception.SpotifyProxyRuntimeException;
 @ControllerAdvice
 public class ExceptionMapper {
 
-    private Logger logger = LoggerFactory.getLogger(ExceptionMapper.class);
+    private final Logger logger = LoggerFactory.getLogger(ExceptionMapper.class);
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SpotifyProxyRuntimeException.class)
@@ -33,7 +33,7 @@ public class ExceptionMapper {
 
         }
 
-        public ErrorMessage(String errorMessage) {
+        ErrorMessage(String errorMessage) {
             this.error = errorMessage;
         }
 

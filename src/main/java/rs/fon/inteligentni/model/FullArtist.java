@@ -2,12 +2,12 @@ package rs.fon.inteligentni.model;
 
 import java.util.List;
 
-public class FullArtist {
+class FullArtist {
 	
-	protected List<String> genres;	
-	protected String id;	
-	protected String name;	
-	protected Integer popularity;
+	private List<String> genres;
+	private String id;
+	private String name;
+	private Integer popularity;
 
 	public List<String> getGenres() {
 		return genres;

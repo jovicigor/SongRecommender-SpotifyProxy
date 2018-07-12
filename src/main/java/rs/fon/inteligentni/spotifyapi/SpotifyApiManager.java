@@ -79,7 +79,7 @@ public class SpotifyApiManager {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization",
                 "Bearer " + clientCredentials.getAccessToken());
-        HttpEntity<String> entity = new HttpEntity<String>("parameters",
+        HttpEntity<String> entity = new HttpEntity<>("parameters",
                 headers);
 
         ResponseEntity<FullTrack> result = restTemplate.exchange(audioInfouri,

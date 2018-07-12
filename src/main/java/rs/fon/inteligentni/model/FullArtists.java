@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FullArtists {
-	protected List<FullArtist> artists = new ArrayList<FullArtist>();
+	private List<FullArtist> artists = new ArrayList<>();
 
 	public List<FullArtist> getArtists() {
 		return artists;

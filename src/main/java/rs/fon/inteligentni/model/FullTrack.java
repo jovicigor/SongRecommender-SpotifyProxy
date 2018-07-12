@@ -3,9 +3,6 @@ package rs.fon.inteligentni.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.wrapper.spotify.models.SimpleAlbum;
-import com.wrapper.spotify.models.SimpleArtist;
-
 
 public class FullTrack {
 	
@@ -18,22 +15,22 @@ public class FullTrack {
 	private Integer popularity;
 	private String previewUrl;
 	
-	private List<FullArtist> artists = new ArrayList<FullArtist>();
+	private List<FullArtist> artists = new ArrayList<>();
 
 	// AUDIO-INFO
-	protected Float danceability;
-	protected Float energy;
-	protected Integer key;
-	protected Float loudness;
-	protected Integer mode;
-	protected Float speechiness;
-	protected Float acousticness;
-	protected Float instrumentalness;
-	protected Float liveness;
-	protected Float valence;
-	protected Float tempo;
-	protected Integer duration_ms;
-	protected Integer time_signature;	
+	private Float danceability;
+	private Float energy;
+	private Integer key;
+	private Float loudness;
+	private Integer mode;
+	private Float speechiness;
+	private Float acousticness;
+	private Float instrumentalness;
+	private Float liveness;
+	private Float valence;
+	private Float tempo;
+	private Integer duration_ms;
+	private Integer time_signature;
 
 	public FullTrack() {
 
