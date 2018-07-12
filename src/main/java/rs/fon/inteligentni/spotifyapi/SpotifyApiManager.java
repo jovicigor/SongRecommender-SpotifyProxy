@@ -24,6 +24,7 @@ import rs.fon.inteligentni.rest.exception.SpotifyProxyRuntimeException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class SpotifyApiManager {
 
@@ -130,67 +131,41 @@ public class SpotifyApiManager {
     }
 
 
-    public FullTrack getTrackByName(String name) {
-        if (api == null) {
-            authorize();
-        }
-        int tryCount = 3;
-        RuntimeException exception = null;
-        do {
-            try {
-                TrackSearchRequest request = api.searchTracks(name).build();
-                Page<Track> trackSearchResult = request.get();
-                logger.debug("I got " + trackSearchResult.getTotal()
-                        + " results!");
-                List<Track> trackList = trackSearchResult.getItems();
-                if (trackList.isEmpty()) {
-                    logger.debug("Couldn't find track " + name);
-                    return null;
-                }
-                return convertToFullTrack(trackList.get(0));
-            } catch (IOException | WebApiException e) {
-                tryCount--;
-                logger.error(
-                        "Error retreiving song from Spotify. Going to try "
-                                + tryCount + " more time:", e);
-                if (tryCount == 0) {
-                    exception = new SpotifyProxyRuntimeException(e.getMessage());
-                } else {
-                    authorize();
-                }
+    public Optional<FullTrack> getTrackByName(String name) {
+        try {
+            if (api == null) {
+                authorize();
             }
-        } while (tryCount > 0);
 
-        throw exception;
+            TrackSearchRequest request = api.searchTracks(name).build();
+            Page<Track> trackSearchResult = request.get();
 
+            logger.debug(String.format("Got %d results for %s", trackSearchResult.getTotal(), name));
+
+            return trackSearchResult.getItems().stream()
+                    .findFirst()
+                    .map(this::convertToFullTrack);
+        } catch (IOException | WebApiException e) {
+            logger.error(String.format("Error retreiving song from Spotify: %s", name));
+            logger.error(e.getLocalizedMessage());
+            return Optional.empty();
+        }
     }
 
-    public FullTrack getTrackById(String id) {
-        if (api == null) {
-            authorize();
-        }
-
-        TrackRequest request = api.getTrack(id).build();
-        int tryCount = 2;
-        RuntimeException exception = null;
-        do {
-            try {
-                Track trackResult = request.get();
-                if (trackResult == null) {
-                    logger.debug("Couldn't find track with id " + id);
-                    return null;
-                }
-                return convertToFullTrack(trackResult);
-            } catch (IOException | WebApiException e) {
-                tryCount--;
-                if (tryCount == 0) {
-                    exception = new SpotifyProxyRuntimeException(e.getMessage());
-                } else {
-                    authorize();
-                }
+    public Optional<FullTrack> getTrackById(String id) {
+        try {
+            if (api == null) {
+                authorize();
             }
-        } while (tryCount > 0);
 
-        throw exception;
+            TrackRequest request = api.getTrack(id).build();
+
+            return Optional.ofNullable(request.get())
+                    .map(this::convertToFullTrack);
+        } catch (IOException | WebApiException e) {
+            logger.error(String.format("Error retreiving song from Spotify: %s", id));
+            logger.error(e.getLocalizedMessage());
+            return Optional.empty();
+        }
     }
 }
