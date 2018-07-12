@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 import rs.fon.inteligentni.model.FullArtists;
 import rs.fon.inteligentni.model.FullTrack;
 import rs.fon.inteligentni.model.ReleaseDate;
-import rs.fon.inteligentni.rest.exception.SpotifyProxyRuntimeException;
 
 import java.io.IOException;
 import java.util.List;

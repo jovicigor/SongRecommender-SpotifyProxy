@@ -1,4 +1,4 @@
-package rs.fon.inteligentni.rest.exception;
+package rs.fon.inteligentni.spotifyapi;
 
 public class SpotifyProxyRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 1L;
